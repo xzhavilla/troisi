@@ -7,6 +7,7 @@ import {ErrorHandler} from './ErrorHandler';
 import {HttpErrorHandler} from './HttpErrorHandler';
 import {SendGridInitializer} from './SendGridInitializer';
 import {SyntaxErrorHandler} from './SyntaxErrorHandler';
+import cors = require('cors');
 
 const PATH_EMAILS = '/api/v1/emails';
 
@@ -15,6 +16,7 @@ export const Api = {
     ask<Environment>()
       .chain(() => SendGridInitializer)
       .map(() => express)
+      .map(x => x.use(cors()))
       .map(x => x.use(json()))
       .map(x => x.use(SyntaxErrorHandler))
       .chain(x => NewEmail.map(f => x.post(PATH_EMAILS, f)))
