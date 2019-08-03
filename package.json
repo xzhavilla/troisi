@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "",
   "scripts": {
+    "heroku-prebuild": "cd ./etc/ && ln -sf env.production.ts env.ts",
     "build": "tsc",
     "start": "ts-node bin/web.ts"
   },
