@@ -23,8 +23,8 @@ export const Dispatch = {
             .then(constVoid);
         },
         (error: any) => Errors(
-          ...error.response.body.errors
-            .map((x: any) => x.message),
+          ...((((error || {}).response || {}).body || {}).errors || [])
+            .map((err: any) => (err || {}).message),
         ),
       ),
     )
