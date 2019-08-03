@@ -7,11 +7,11 @@ export const EmailC = t.intersection([
     from: RecipientC,
     to: t.array(RecipientC),
     subject: t.string,
+    body: BodyC,
   }),
   t.partial({
     cc: t.array(RecipientC),
     bcc: t.array(RecipientC),
     replyTo: RecipientC,
-    body: BodyC,
   }),
 ]);

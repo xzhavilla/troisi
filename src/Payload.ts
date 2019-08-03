@@ -22,7 +22,7 @@ export const Payload = {
     bcc: Email.optional.bcc.composeFold(Recipient.fold.mailbox).getAll(email),
     replyTo: Email.optional.replyTo.composeGetter(Recipient.getter.mailbox).headOption(email).fold(undefined, identity),
     subject: Email.lens.subject.get(email),
-    text: Email.optional.body.composeOptional(Body.optional.plain).getOption(email).fold(undefined, identity),
-    html: Email.optional.body.composeOptional(Body.optional.html).getOption(email).fold(undefined, identity),
+    text: Email.lens.body.composeOptional(Body.optional.plain).getOption(email).fold(undefined, identity),
+    html: Email.lens.body.composeOptional(Body.optional.html).getOption(email).fold(undefined, identity),
   }),
 };

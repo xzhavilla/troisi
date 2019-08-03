@@ -13,11 +13,11 @@ export const Email = {
     from: 'from',
     to: 'to',
     subject: 'subject',
+    body: 'body',
   }),
   optional: Optionals.fromNullableProps<Email>()({
     cc: 'cc',
     bcc: 'bcc',
     replyTo: 'replyTo',
-    body: 'body',
   }),
 };
