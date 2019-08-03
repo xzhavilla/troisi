@@ -22,7 +22,10 @@ export const Dispatch = {
             .send(payload)
             .then(constVoid);
         },
-        (error: any) => Errors((error || {}).message),
+        (error: any) => {
+          console.error(error);
+          return Errors((error || {}).message);
+        },
       ),
     )
     .chain(
