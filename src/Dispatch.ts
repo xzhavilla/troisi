@@ -23,7 +23,7 @@ export const Dispatch = {
             .then(constVoid);
         },
         (error: any) => {
-          console.error(error);
+          console.error(error.response.body);
           return Errors((error || {}).message);
         },
       ),
