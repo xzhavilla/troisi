@@ -16,11 +16,11 @@ export interface Payload {
 
 export const Payload = {
   fromEmail: (email: Email): Payload => ({
-    from: Email.lens.from.composeGetter(Recipient.getter.xxx).get(email),
-    to: Email.lens.to.composeFold(Recipient.fold.xxx).getAll(email),
-    cc: Email.optional.cc.composeFold(Recipient.fold.xxx).getAll(email),
-    bcc: Email.optional.cc.composeFold(Recipient.fold.xxx).getAll(email),
-    replyTo: Email.optional.replyTo.composeGetter(Recipient.getter.xxx).headOption(email).fold(undefined, identity),
+    from: Email.lens.from.composeGetter(Recipient.getter.mailbox).get(email),
+    to: Email.lens.to.composeFold(Recipient.fold.mailbox).getAll(email),
+    cc: Email.optional.cc.composeFold(Recipient.fold.mailbox).getAll(email),
+    bcc: Email.optional.bcc.composeFold(Recipient.fold.mailbox).getAll(email),
+    replyTo: Email.optional.replyTo.composeGetter(Recipient.getter.mailbox).headOption(email).fold(undefined, identity),
     subject: Email.lens.subject.get(email),
     text: Email.optional.body.composeOptional(Body.optional.plain).getOption(email).fold(undefined, identity),
     html: Email.optional.body.composeOptional(Body.optional.html).getOption(email).fold(undefined, identity),

@@ -10,17 +10,23 @@ type _Recipient = t.TypeOf<typeof RecipientC>
 export interface Recipient extends _Recipient {
 }
 
-
 const lenses = Lenses.fromProps<Recipient>()({address: 'address'});
 const optionals = Optionals.fromNullableProps<Recipient>()({name: 'name'});
 const getters = {
-  xxx: new Getter<Recipient, string>(
+  mailbox: new Getter<Recipient, string>(
     recipient => optionals.name
       .getOption(recipient)
       .fold(
         lenses.address.get(recipient),
         name => `${name} <${lenses.address.get(recipient)}>`,
       ),
+  ),
+  obfuscatedAddress: new Getter<Recipient, string>(
+    recipient => lenses.address
+      .get(recipient)
+      .split('@')
+      .map(part => part.replace(/(?<=.)./g, '*'))
+      .join('@'),
   ),
 };
 const traversals = {self: fromTraversable(array)<Recipient>()};
@@ -31,6 +37,6 @@ export const Recipient = {
   getter: getters,
   traversal: traversals,
   fold: {
-    xxx: traversals.self.composeGetter(getters.xxx),
+    mailbox: traversals.self.composeGetter(getters.mailbox),
   },
 };
