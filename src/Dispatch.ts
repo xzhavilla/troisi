@@ -11,12 +11,17 @@ import {Services} from './Services';
 export const Dispatch = {
   fromEmail: (email: Email) => ask<Environment, Errors>()
     .map(Environment.lens.services.composeLens(Services.lens.info).get)
-    .chain(logger => logF(readerTaskEither)<Environment, Errors>(logger)(`>¦  Sending email from "${Email.lens.from.composeGetter(Recipient.getter.obfuscatedAddress).get(email)}" to "${Email.lens.to.composeTraversal(Recipient.traversal.self).composeGetter(Recipient.getter.obfuscatedAddress).getAll(email).join('", "')}"`)(undefined))
+    .chain(logger => logF(readerTaskEither)<Environment, Errors>(logger)(`>¦  Sending email from "${Email.lens.from.composeGetter(Recipient.getter.obfuscatedAddress).get(email)}" to "${Email.lens.to.composeTraversal(Recipient.traversal.self).composeGetter(Recipient.getter.obfuscatedAddress).getAll(email).join('", "')}"`)(email))
+    .map(Payload.fromEmail)
     .chain(
-      () => tryCatch<Environment, Errors, void>(
+      payload => ask<Environment, Errors>()
+        .map(Environment.lens.services.composeLens(Services.lens.log).get)
+        .chain(logger => logF(readerTaskEither)<Environment, Errors>(logger)(payload)(payload)),
+    )
+    .chain(
+      payload => tryCatch<Environment, Errors, void>(
         environment => {
           const sendGridClient = Environment.lens.services.composeLens(Services.lens.sendGridClient).get(environment);
-          const payload = Payload.fromEmail(email);
 
           return sendGridClient
             .send(payload)
