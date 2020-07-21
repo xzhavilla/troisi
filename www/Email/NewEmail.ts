@@ -9,6 +9,7 @@ import {Dispatch} from '../../src/Dispatch';
 import {Email} from '../../src/Email';
 import {Environment} from '../../src/Environment';
 import {EmailC} from '../../src/io/EmailC';
+import {FileC} from '../../src/io/FileC';
 import {MultipartEmailDataC} from '../../src/io/MultipartEmailDataC';
 import {ResourceC} from '../../src/io/ResourceC';
 import {Resource} from '../../src/Resource';
@@ -27,6 +28,12 @@ export const NewEmail: Reader<Environment, RequestHandler> =
         )(req.body)
           .mapLeft(errors => Errors(...errors.map(BadInputError.fromError)))
           .map(Resource.lens.attributes<Email>().get)
+          .chain(
+            email =>
+              decodeF(readerTaskEither)<Environment, Errors>()(t.array(FileC))(req.files)
+                .mapLeft(errors => Errors(...errors.map(BadInputError.fromError)))
+                .map(files => Email.optional.attachments.set(files)(email))
+          )
           .chain(Dispatch.fromEmail)
           .run(environment)
           .then(

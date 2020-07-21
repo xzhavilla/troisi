@@ -1,9 +1,11 @@
 import {identity} from 'fp-ts/lib/function';
-import {Body} from './Body';
-import {Email} from './Email';
-import {Recipient} from './Recipient';
+import {Body} from '../Body';
+import {Email} from '../Email';
+import {File} from '../File';
+import {Recipient} from '../Recipient';
+import {AttachmentData} from './AttachmentData';
 
-export interface Payload {
+export interface MailData {
   from: string
   to: Array<string>
   cc?: Array<string>
@@ -12,10 +14,11 @@ export interface Payload {
   subject: string
   text?: string
   html?: string
+  attachments: Array<AttachmentData>
 }
 
-export const Payload = {
-  fromEmail: (email: Email): Payload => ({
+export const MailData = {
+  fromEmail: (email: Email): MailData => ({
     from: Email.lens.from.composeGetter(Recipient.getter.mailbox).get(email),
     to: Email.lens.to.composeFold(Recipient.fold.mailbox).getAll(email),
     cc: Email.optional.cc.composeFold(Recipient.fold.mailbox).getAll(email),
@@ -24,5 +27,9 @@ export const Payload = {
     subject: Email.lens.subject.get(email),
     text: Email.lens.body.composeOptional(Body.optional.plain).getOption(email).fold(undefined, identity),
     html: Email.lens.body.composeOptional(Body.optional.html).getOption(email).fold(undefined, identity),
+    attachments: Email.optional.attachments
+      .composeTraversal(File.traversal.self)
+      .composeGetter(File.getter.attachmentData)
+      .getAll(email)
   }),
 };
