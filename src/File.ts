@@ -15,7 +15,7 @@ export const File = {
       file => ({
         filename: file.name,
         type: file.type,
-        content: file.buffer.toString()
+        content: file.buffer.toString('base64')
       })
     )
   },
