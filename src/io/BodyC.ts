@@ -13,4 +13,4 @@ export const BodyC = t.union([
     plain: t.string,
     html: t.string,
   }),
-]);
+], 'Body');

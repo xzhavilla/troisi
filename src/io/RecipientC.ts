@@ -9,4 +9,4 @@ export const RecipientC = t.intersection([
   t.partial({
     name: NonEmptyString,
   }),
-]);
+], 'Recipient');

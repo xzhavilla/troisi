@@ -6,4 +6,4 @@ export const ResourceC = <C extends t.Mixed>(type: string, codec: C) =>
       type: t.literal(type),
       attributes: codec,
     }),
-  });
+  }, 'Resource');

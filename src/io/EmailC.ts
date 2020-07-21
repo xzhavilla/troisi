@@ -14,4 +14,4 @@ export const EmailC = t.intersection([
     bcc: t.array(RecipientC),
     replyTo: RecipientC,
   }),
-]);
+], 'Email');
