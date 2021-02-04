@@ -12,7 +12,7 @@
     "url": "git+https://github.com/xzhavilla/troisi.git"
   },
   "author": "Alberto Villa <villa.alberto@gmail.com>",
-  "license": "BSD-2-Clause",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/xzhavilla/troisi/issues"
   },
